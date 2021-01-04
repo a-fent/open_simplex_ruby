@@ -1,0 +1,59 @@
+#+TITLE: Ruby Open Simplex Noise
+#+SUBTITLE: 2d, 3d and 4d noise generation
+
+* OpenSimplex
+This C extension for Ruby provides a fast way of producing consistent
+noise using the OpenSimplex algorithm. Consistent noise is comprised of
+random values at points across one or more dimensions, in which however
+close points have close values. Depending on the specific noise
+function, this produces the effect of ridges, gradients and the like.
+Such distributions may be useful for procedural generation, for textures
+in graphics, or anywhere where a reproducible random value for one or
+more coordinates is needed.
+
+OpenSimplex is a patent-unencumbered implementation of the Simplex
+algorithm, which is itself an improved version of Perlin noise. Simplex
+noise produces similar textures to Perlin noise, but is computationally
+simpler and avoids some known artifacts that Perlin noise can produce.
+
+Currently this library supports the following types of noise:
+- Simplex noise in 1 to 4 dimensions;
+- Simplex fractal (with specifiable octaves, gain and lacunarity)
+- Ridged noise
+- Worley noise
+- Periodic (wrappable/tiling) versions of the above in 1 and 2 dimensions
+
+* Installation
+The library requires a working C++ compiler and [[https://github.com/g-truc/glm][GLM, the GL Mathematics library]]. GLM is a header-only library; on Debian-style Linux, for example, it can be installed with =apt install libglm-dev=.
+
+#+begin_src sh
+gem install open_simplex
+#+end_src
+
+* Usage
+  The library currently offers only a module-function interface.
+
+  =OpenSimplex::simplex(4)=
+
+  A single value in one dimension. Simplex noise yields values in the range -1<x<1\
+
+  =OpenSimplex::simplex(2.1, 8.3)=
+
+  A single value from two dimensions.
+
+* Implemented Noise Types
+** Simplex
+** Ridged
+** Worley
+** Simplex Fractal
+* Unlicence
+  The ruby bindings are provided under an unlicence.
+** Simplex Noise Implementation
+   The underlying C implementation of noise in this library is:
+
+   =Copyright (c) 2016, Simon Geilfus, All rights reserved.=
+   =Code adapted from Stefan Gustavson Simplex Noise Public Domain implementation=
+   =Curl noise adapted from Robert Bridson papers=
+   
+
+  
