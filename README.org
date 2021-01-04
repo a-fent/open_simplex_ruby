@@ -11,6 +11,8 @@ Such distributions may be useful for procedural generation, for textures
 in graphics, or anywhere where a reproducible random value for one or
 more coordinates is needed.
 
+[[./samples/ridged.png]]
+
 OpenSimplex is a patent-unencumbered implementation of the Simplex
 algorithm, which is itself an improved version of Perlin noise. Simplex
 noise produces similar textures to Perlin noise, but is computationally
@@ -43,17 +45,22 @@ gem install open_simplex
 
 * Implemented Noise Types
 ** Simplex
+[[./samples/simplex.png]]
 ** Ridged
+[[./samples/ridged.png]]
 ** Worley
+[[./samples/worley.png]]
 ** Simplex Fractal
+[[./samples/simplex_fractal.png]]
 * Unlicence
   The ruby bindings are provided under an unlicence.
 ** Simplex Noise Implementation
    The underlying C implementation of noise in this library is:
-
-   =Copyright (c) 2016, Simon Geilfus, All rights reserved.=
-   =Code adapted from Stefan Gustavson Simplex Noise Public Domain implementation=
-   =Curl noise adapted from Robert Bridson papers=
+   #+begin_quote
+   Copyright (c) 2016, Simon Geilfus, All rights reserved.
+   Code adapted from Stefan Gustavson Simplex Noise Public Domain implementation
+   Curl noise adapted from Robert Bridson papers
+   #+end_quote
    
 
   
