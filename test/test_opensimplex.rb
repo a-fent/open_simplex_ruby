@@ -22,6 +22,26 @@ class TestOpenSimplex < MiniTest::Test
     assert(o < 1)
   end
   
+  def test_simplex_fractal
+    assert_raises(ArgumentError) { OpenSimplex::simplex_fractal }
+    o = OpenSimplex::simplex_fractal(0.2)
+    assert_kind_of(Float, o)
+    assert(o > -1)
+    assert(o < 1)
+    o = OpenSimplex::simplex_fractal(0.3, 0.5)
+    assert_kind_of(Float, o)
+    assert(o > -1)
+    assert(o < 1)
+    o = OpenSimplex::simplex_fractal(0.1, 0.7, 1.2)
+    assert_kind_of(Float, o)
+    assert(o > -1)
+    assert(o < 1)
+    o = OpenSimplex::simplex_fractal(1.5, 21, 0.2, -0.5)
+    assert_kind_of(Float, o)
+    assert(o > -1)
+    assert(o < 1)
+  end
+  
   def test_ridged
     o = OpenSimplex::ridged(0.2)
     assert_kind_of(Float, o)

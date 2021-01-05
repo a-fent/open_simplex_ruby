@@ -181,15 +181,18 @@ static VALUE opsimp_worley_fbm(int argc, VALUE* argv, VALUE self)
 
 extern "C" void Init_open_simplex() {
   VALUE cOpenSimplex = rb_define_class("OpenSimplex", rb_cObject);
-  rb_define_singleton_method(cOpenSimplex, "seed", &osimplex_seed, 1);
-  rb_define_singleton_method(cOpenSimplex, "simplex", &osimplex_noise_value, -1);
-  rb_define_method(cOpenSimplex, "simplex", &osimplex_noise_value, -1);
-  rb_define_singleton_method(cOpenSimplex, "ridged", &osimplex_ridgednoise_value, -1);
-  rb_define_method(cOpenSimplex, "ridged", &osimplex_ridgednoise_value, -1);
-  rb_define_singleton_method(cOpenSimplex, "worley", &osimplex_worleynoise_value, -1);
-  rb_define_method(cOpenSimplex, "worley", &osimplex_worleynoise_value, -1);
-  // rb_define_method(cOpenSimplex, "noise_3d", &opsimp_3d_value, 3);
-  // rb_define_method(cOpenSimplex, "noise_4d", &opsimp_4d_value, 4);
-  rb_define_singleton_method(cOpenSimplex, "simplex_periodic", &opsimp_2d_periodic, 4);
-  rb_define_singleton_method(cOpenSimplex, "fbm", &opsimp_fbm, -1);
+  rb_define_singleton_method(cOpenSimplex, "seed",
+							 &osimplex_seed, 1);
+  rb_define_singleton_method(cOpenSimplex, "simplex",
+							 &osimplex_noise_value, -1);
+  rb_define_singleton_method(cOpenSimplex, "ridged",
+							 &osimplex_ridgednoise_value, -1);
+  rb_define_singleton_method(cOpenSimplex, "worley",
+							 &osimplex_worleynoise_value, -1);
+  rb_define_singleton_method(cOpenSimplex, "simplex_periodic",
+							 &opsimp_2d_periodic, 4);
+  rb_define_singleton_method(cOpenSimplex, "fbm",
+							 &opsimp_fbm, -1);
+  rb_define_singleton_method(cOpenSimplex, "worley_fractal",
+							 &opsimp_worley_fbm, -1);
 }
