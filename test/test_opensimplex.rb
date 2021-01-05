@@ -52,6 +52,17 @@ class TestOpenSimplex < MiniTest::Test
     assert(o < 1)
   end
   
+  def test_worley_fractal
+    o = OpenSimplex::worley_fractal(0.3, 0.5)
+    assert_kind_of(Float, o)
+    assert(o > -1)
+    assert(o < 1)
+    o = OpenSimplex::worley_fractal(0.1, 0.7, 1.2)
+    assert_kind_of(Float, o)
+    assert(o > -1)
+    assert(o < 1)
+  end
+  
   def test_periodic
     o1 = OpenSimplex::simplex_periodic(0.2, 0.5, 3, 4)
     o2 = OpenSimplex::simplex_periodic(3.2, 0.5, 3, 4)

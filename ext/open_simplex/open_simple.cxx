@@ -138,6 +138,33 @@ static VALUE opsimp_fbm(int argc, VALUE* argv, VALUE self)
   return DBL2NUM(val);
 }
 
+static VALUE opsimp_worley_fbm(int argc, VALUE* argv, VALUE self)
+{
+  VALUE dim1, dim2, dim3, dim4;
+  VALUE opts;
+  rb_scan_args(argc, argv, "21:", &dim1, &dim2, &dim3, &opts);
+
+  if (NIL_P(opts)) opts = rb_hash_new();
+  VALUE octa_r = rb_hash_aref(opts, ID2SYM(rb_intern("octaves")));
+  uint8_t octa  = NIL_P(octa_r) ? 4 : NUM2UINT(octa_r);
+  VALUE lacu_r = rb_hash_aref(opts, ID2SYM(rb_intern("lacunarity")));
+  float lacu  = NIL_P(lacu_r) ? 2.0f : NUM2DBL(lacu_r);
+  VALUE gain_r = rb_hash_aref(opts, ID2SYM(rb_intern("gain")));
+  float gain  = NIL_P(gain_r) ? 0.5f : NUM2DBL(gain_r);
+  float val;
+  if ( ! NIL_P(dim3) ) {
+	val = Simplex::worleyfBm(glm::vec3(NUM2DBL(dim1), NUM2DBL(dim2),
+								 NUM2DBL(dim3) ),
+					   octa, lacu, gain);
+
+  }
+  else {
+	val = Simplex::worleyfBm(glm::vec2(NUM2DBL(dim1), NUM2DBL(dim2)),
+					   octa, lacu, gain);
+  }
+  return DBL2NUM(val);
+}
+
   
   
 // static VALUE opsimp_2d_periodic_value(VALUE self, VALUE x, VALUE y,
