@@ -48,3 +48,8 @@ noise_image("simplex_fractal.png") do | x, y |
   (val + 1) * 128 
 end
 
+noise_image("worley_smooth.png") do | x, y |
+  val = OpenSimplex::worley_smooth(x, y, falloff: 0.1)
+  val * 255
+end
+
