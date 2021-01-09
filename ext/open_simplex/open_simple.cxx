@@ -86,23 +86,6 @@ static VALUE osimplex_worleynoise_value(int argc, VALUE* argv, VALUE self)
 //   return DBL2NUM(val);
 // }
 
-static VALUE opsimp_2d_periodic(VALUE self, VALUE x, VALUE y, VALUE size_x, VALUE size_y)
-{
-
-  double r_x = NUM2DBL(x) / NUM2DBL(size_x);
-  double r_y = NUM2DBL(y) / NUM2DBL(size_y);
-
-  double dx = r_x * 2 * M_PI;
-  double dy = r_y * 2 * M_PI;
-
-  double a = cos(dx) * (2*M_PI);
-  double b = cos(dy) * (2*M_PI);
-  double c = sin(dx) * (2*M_PI);
-  double d = sin(dy) * (2*M_PI);
-
-  return DBL2NUM(Simplex::noise(glm::vec4(a, b, c, d)));
-}
-
 static VALUE opsimp_fbm(int argc, VALUE* argv, VALUE self)
 {
   VALUE dim1, dim2, dim3, dim4;
@@ -140,7 +123,7 @@ static VALUE opsimp_fbm(int argc, VALUE* argv, VALUE self)
 
 static VALUE opsimp_worley_fbm(int argc, VALUE* argv, VALUE self)
 {
-  VALUE dim1, dim2, dim3, dim4;
+  VALUE dim1, dim2, dim3;
   VALUE opts;
   rb_scan_args(argc, argv, "21:", &dim1, &dim2, &dim3, &opts);
 
@@ -154,30 +137,87 @@ static VALUE opsimp_worley_fbm(int argc, VALUE* argv, VALUE self)
   float val;
   if ( ! NIL_P(dim3) ) {
 	val = Simplex::worleyfBm(glm::vec3(NUM2DBL(dim1), NUM2DBL(dim2),
-								 NUM2DBL(dim3) ),
-					   octa, lacu, gain);
-
+									   NUM2DBL(dim3) ),
+							 octa, lacu, gain);
   }
   else {
 	val = Simplex::worleyfBm(glm::vec2(NUM2DBL(dim1), NUM2DBL(dim2)),
-					   octa, lacu, gain);
+							 octa, lacu, gain);
   }
   return DBL2NUM(val);
 }
 
-  
-  
-// static VALUE opsimp_2d_periodic_value(VALUE self, VALUE x, VALUE y,
-// 									  VALUE size_x, VALUE size_y)
-// {
-//   struct osn_context *ctx;
-//   Data_Get_Struct(self, struct osn_context, ctx);
+static VALUE opsimp_worley_smooth(int argc, VALUE* argv, VALUE self)
+{
+  VALUE dim1, dim2, dim3;
+  VALUE opts;
+  rb_scan_args(argc, argv, "21:", &dim1, &dim2, &dim3, &opts);
 
-//   double noise = opsimp_2d_periodic(ctx,
-// 									NUM2DBL(x), NUM2DBL(y),
-// 									NUM2DBL(size_x), NUM2DBL(size_y));
-//   return DBL2NUM(noise);
-// }
+  if (NIL_P(opts)) opts = rb_hash_new();
+  VALUE falloff_r = rb_hash_aref(opts, ID2SYM(rb_intern("falloff")));
+  if ( NIL_P(falloff_r) ) {
+	rb_raise(rb_eArgError, "Falloff must be specified for smooth Worley");
+  }
+  float falloff = NUM2DBL(falloff_r);
+  float val;
+  if ( ! NIL_P(dim3) ) {
+	val = Simplex::worleyfBm(glm::vec3(NUM2DBL(dim1), NUM2DBL(dim2),
+								 NUM2DBL(dim3) ),
+							 falloff);
+
+  }
+  else {
+	val = Simplex::worleyfBm(glm::vec2(NUM2DBL(dim1), NUM2DBL(dim2)),
+							 falloff);
+  }
+  return DBL2NUM(val);
+}
+
+
+static VALUE opsimp_2d_simplex_periodic(VALUE self, VALUE x, VALUE y, VALUE size_x, VALUE size_y)
+{
+  double r_x = NUM2DBL(x) / NUM2DBL(size_x);
+  double r_y = NUM2DBL(y) / NUM2DBL(size_y);
+
+  double dx = r_x * 2 * M_PI;
+  double dy = r_y * 2 * M_PI;
+
+  double a = cos(dx) * (2*M_PI);
+  double b = cos(dy) * (2*M_PI);
+  double c = sin(dx) * (2*M_PI);
+  double d = sin(dy) * (2*M_PI);
+
+  return DBL2NUM(Simplex::noise(glm::vec4(a, b, c, d)));
+}
+
+static VALUE opsimp_2d_fbm_periodic(int argc, VALUE* argv, VALUE self)
+{
+  VALUE x, y, size_x, size_y;
+  VALUE opts;
+  rb_scan_args(argc, argv, "4:", &x, &y, &size_x, &size_y, &opts);
+
+  if (NIL_P(opts)) opts = rb_hash_new();
+  VALUE octa_r = rb_hash_aref(opts, ID2SYM(rb_intern("octaves")));
+  uint8_t octa  = NIL_P(octa_r) ? 4 : NUM2UINT(octa_r);
+  VALUE lacu_r = rb_hash_aref(opts, ID2SYM(rb_intern("lacunarity")));
+  float lacu  = NIL_P(lacu_r) ? 2.0f : NUM2DBL(lacu_r);
+  VALUE gain_r = rb_hash_aref(opts, ID2SYM(rb_intern("gain")));
+  float gain  = NIL_P(gain_r) ? 0.5f : NUM2DBL(gain_r);
+
+  double r_x = NUM2DBL(x) / NUM2DBL(size_x);
+  double r_y = NUM2DBL(y) / NUM2DBL(size_y);
+
+  double dx = r_x * 2 * M_PI;
+  double dy = r_y * 2 * M_PI;
+
+  double a = cos(dx) * (2*M_PI);
+  double b = cos(dy) * (2*M_PI);
+  double c = sin(dx) * (2*M_PI);
+  double d = sin(dy) * (2*M_PI);
+
+  return DBL2NUM(Simplex::fBm(glm::vec4(a, b, c, d), octa, lacu, gain));
+}
+
 
 extern "C" void Init_open_simplex() {
   VALUE cOpenSimplex = rb_define_class("OpenSimplex", rb_cObject);
@@ -190,9 +230,13 @@ extern "C" void Init_open_simplex() {
   rb_define_singleton_method(cOpenSimplex, "worley",
 							 &osimplex_worleynoise_value, -1);
   rb_define_singleton_method(cOpenSimplex, "simplex_periodic",
-							 &opsimp_2d_periodic, 4);
+							 &opsimp_2d_simplex_periodic, 4);
   rb_define_singleton_method(cOpenSimplex, "fbm",
 							 &opsimp_fbm, -1);
+  rb_define_singleton_method(cOpenSimplex, "fbm_periodic",
+							 &opsimp_2d_fbm_periodic, -1);
   rb_define_singleton_method(cOpenSimplex, "worley_fractal",
 							 &opsimp_worley_fbm, -1);
+  rb_define_singleton_method(cOpenSimplex, "worley_smooth",
+							 &opsimp_worley_smooth, -1);
 }

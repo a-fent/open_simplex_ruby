@@ -46,12 +46,20 @@ gem install open_simplex
 * Implemented Noise Types
 ** Simplex
 [[./samples/simplex.png]]
+OpenSimplex::simplex(x,[y],[z],[w])
 ** Ridged
 [[./samples/ridged.png]]
+OpenSimplex::ridged(x,[y],[z],[w])
 ** Worley
 [[./samples/worley.png]]
+OpenSimplex::worley(x,y,[z])
 ** Simplex Fractal
 [[./samples/simplex_fractal.png]]
+OpenSimplex::fbm(x,[y],[z],[w], octaves:, lacunarity:, gain:)
+** Simplex Period
+OpenSimplex::simplex_periodic(x,y,period_x,period_y)
+** Simplex Fractal Periodic
+OpenSimplex::fbm_periodic(x,y,period_x,period_y, octaves:, lacunarity:, gain:))
 * Unlicence
   The ruby bindings are provided under an unlicence.
 ** Simplex Noise Implementation
