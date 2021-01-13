@@ -182,12 +182,12 @@ static VALUE opsimp_2d_simplex_periodic(VALUE self, VALUE x, VALUE y, VALUE size
   double dx = r_x * 2 * M_PI;
   double dy = r_y * 2 * M_PI;
 
-  double a = cos(dx) * (2*M_PI);
-  double b = cos(dy) * (2*M_PI);
-  double c = sin(dx) * (2*M_PI);
-  double d = sin(dy) * (2*M_PI);
+  double a = cos(dx);
+  double b = cos(dy);
+  double c = sin(dx);
+  double d = sin(dy);
 
-  return DBL2NUM(Simplex::noise(glm::vec4(a, b, c, d)));
+  return DBL2NUM(Simplex::noise(glm::vec4(a, c, b, d)));
 }
 
 static VALUE opsimp_2d_fbm_periodic(int argc, VALUE* argv, VALUE self)
@@ -210,10 +210,10 @@ static VALUE opsimp_2d_fbm_periodic(int argc, VALUE* argv, VALUE self)
   double dx = r_x * 2 * M_PI;
   double dy = r_y * 2 * M_PI;
 
-  double a = cos(dx) * (2*M_PI);
-  double b = cos(dy) * (2*M_PI);
-  double c = sin(dx) * (2*M_PI);
-  double d = sin(dy) * (2*M_PI);
+  double a = cos(dx);
+  double b = cos(dy);
+  double c = sin(dx);
+  double d = sin(dy);
 
   return DBL2NUM(Simplex::fBm(glm::vec4(a, b, c, d), octa, lacu, gain));
 }
