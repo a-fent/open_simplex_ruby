@@ -1,1 +1,1 @@
-OpenSimplex::VERSION = '0.0.2'
+OpenSimplex::VERSION = '0.0.3'
