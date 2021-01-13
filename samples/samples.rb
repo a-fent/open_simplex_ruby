@@ -32,6 +32,12 @@ noise_image("simplex.png") do | x, y |
   (val + 1) * 128 
 end
 
+noise_image("simplex_tiled.png") do | x, y |
+  val = OpenSimplex::simplex_periodic(x, y, WIDTH.fdiv(SCALE), HEIGHT.fdiv(SCALE))
+  # Simplex noise ranges over -1..1
+  (val + 1) * 128 
+end
+
 noise_image("ridged.png") do | x, y |
   val = OpenSimplex::ridged(x, y)
   # Ridged noise ranges 0..1
@@ -45,6 +51,11 @@ end
 
 noise_image("simplex_fractal.png") do | x, y |
   val = OpenSimplex::fbm(x, y)
+  (val + 1) * 128 
+end
+
+noise_image("simplex_fractal_periodic.png") do | x, y |
+  val = OpenSimplex::fbm_periodic(x, y, WIDTH.fdiv(SCALE), HEIGHT.fdiv(SCALE))
   (val + 1) * 128 
 end
 
